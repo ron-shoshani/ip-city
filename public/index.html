@@ -1,0 +1,76 @@
+<html>
+
+<style> // style should be inside head
+  html, body {
+    height: 100%;
+
+  }
+
+  html {
+    display: table;
+    margin: auto;
+    width:  60%;
+    vertical-align: middle;
+  }
+
+</style>
+
+
+<head>
+<meta charset="utf-8">
+  <link rel="stylesheet" href='/bootstrap/css/bootstrap.min.css'>
+  <link rel="stylesheet" href='/dropzone/dropzone.css'>
+  <script src='/jq/jquery.min.js'></script>
+  <script src='/bootstrap/js/bootstrap.min.js'></script>
+  <script src='/dropzone/dropzone.js'></script>
+</head>
+<body>
+
+
+<form name="foo" action="/users" method="post" class="dropzone" encType="multipart/form-data" id="my-awesome-dropzone"></form>
+
+<div style="margin: 0 auto; width:8%; margin-bottom: 5%"> // use style tag for css
+
+  <a href="/outputs/output.csv" download="ip_city">Download File</a> // won't work with multiple users
+
+</div>
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>Counted IPs</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+
+</body>
+<script src='https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js'></script>
+<script>
+
+Dropzone.options.myAwesomeDropzone = {
+    init: function () {
+        this.on("success", function (file, response) {
+            var cityCount = _.countBy(response, 'city');
+            var cityCountLength = Object.keys(cityCount).length;
+            var tr;
+
+            for (var i =0; i < cityCountLength; i++){
+                tr = $('<tr/>');
+                tr.append("<td>" + Object.keys(cityCount)[i]+ "</td>");
+                tr.append("<td>" + Object.values(cityCount)[i]+ "</td>");
+                $('table').append(tr); // append to tbody
+            }
+        });
+    }
+};
+
+
+</script>
+</html>
+
